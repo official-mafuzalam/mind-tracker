@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="How are you feeling today?"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTodayMood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <!-- Mood Buttons -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnHappy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="😊 Happy" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNeutral"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="😐 Neutral" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="😔 Sad" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAngry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="😡 Angry" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTired"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="😴 Tired" />
+
+        <Button
+            android:id="@+id/btnUpdateMood"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Update Today's Mood"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnStats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="View Weekly Stats" />
+
+    </LinearLayout>
+</ScrollView>
