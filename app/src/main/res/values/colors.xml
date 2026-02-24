@@ -2,4 +2,18 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="purple_500">#FF6200EE</color>
+    <color name="green_500">#FF4CAF50</color>
+
+    <!-- Mood button colors -->
+    <color name="mood_button_default">#F5F5F5</color>
+    <color name="mood_button_selected">#E8F0FE</color>
+
+    <!-- Mood button text colors -->
+    <color name="mood_button_text_default">#FF000000</color>
+    <color name="mood_button_text_selected">#FF6200EE</color>
+
+    <color name="surface_light">#FFF9F9F9</color>
+    <color name="primary">#FF6200EE</color>
 </resources>

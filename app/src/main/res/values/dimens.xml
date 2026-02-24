@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="mood_button_corner">16dp</dimen>
+    <dimen name="mood_button_stroke_selected">2dp</dimen>
+    <dimen name="mood_button_padding_start">24dp</dimen>
+    <dimen name="mood_button_padding_end">24dp</dimen>
+    <dimen name="mood_button_padding_top">12dp</dimen>
+    <dimen name="mood_button_padding_bottom">12dp</dimen>
+</resources>

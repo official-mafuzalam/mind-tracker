@@ -1,10 +1,16 @@
 package com.octosync.mindtracker;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -25,34 +31,31 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class StatsActivity extends AppCompatActivity {
+public class StatsFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
     private PieChart pieChart;
     private BarChart barChart;
-
     private final String[] moods = {"Happy", "Neutral", "Sad", "Angry", "Tired"};
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stats);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_stats, container, false);
 
-        sharedPreferences = getSharedPreferences("MoodPrefs", MODE_PRIVATE);
+        sharedPreferences = requireActivity().getSharedPreferences("MoodPrefs", Context.MODE_PRIVATE);
 
-        pieChart = findViewById(R.id.pieChart);
-        barChart = findViewById(R.id.barChart);
+        pieChart = view.findViewById(R.id.pieChart);
+        barChart = view.findViewById(R.id.barChart);
 
         setupWeeklyPieChart();
         setupMonthlyBarChart();
+
+        return view;
     }
 
-    // ================= WEEKLY PIE =================
-
     private void setupWeeklyPieChart() {
-
         Map<String, Integer> weeklyCounts = calculateMoodStats(7);
-
         ArrayList<PieEntry> entries = new ArrayList<>();
 
         for (String mood : moods) {
@@ -62,12 +65,15 @@ public class StatsActivity extends AppCompatActivity {
             }
         }
 
+        if (entries.isEmpty()) {
+            entries.add(new PieEntry(1, "No Data"));
+        }
+
         PieDataSet dataSet = new PieDataSet(entries, "Last 7 Days");
         dataSet.setColors(getMoodColors());
         dataSet.setValueTextSize(14f);
 
         PieData data = new PieData(dataSet);
-
         pieChart.setData(data);
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
@@ -75,12 +81,8 @@ public class StatsActivity extends AppCompatActivity {
         pieChart.invalidate();
     }
 
-    // ================= MONTHLY BAR =================
-
     private void setupMonthlyBarChart() {
-
         Map<String, Integer> monthlyCounts = calculateMoodStats(30);
-
         ArrayList<BarEntry> entries = new ArrayList<>();
 
         for (int i = 0; i < moods.length; i++) {
@@ -107,38 +109,30 @@ public class StatsActivity extends AppCompatActivity {
         barChart.invalidate();
     }
 
-    // ================= CALCULATION LOGIC =================
-
     private Map<String, Integer> calculateMoodStats(int days) {
-
         Map<String, Integer> counts = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
 
         for (int i = 0; i < days; i++) {
-
             String dateKey = new SimpleDateFormat("yyyy_MM_dd", Locale.getDefault())
                     .format(calendar.getTime());
-
             String mood = sharedPreferences.getString(dateKey, "");
 
             if (!mood.isEmpty()) {
                 counts.put(mood, counts.getOrDefault(mood, 0) + 1);
             }
-
             calendar.add(Calendar.DAY_OF_YEAR, -1);
         }
-
         return counts;
     }
 
     private ArrayList<Integer> getMoodColors() {
-
         return new ArrayList<>(Arrays.asList(
-                Color.parseColor("#4CAF50"),
-                Color.parseColor("#FFC107"),
-                Color.parseColor("#2196F3"),
-                Color.parseColor("#F44336"),
-                Color.parseColor("#9C27B0")
+                Color.parseColor("#4CAF50"), // Happy - Green
+                Color.parseColor("#FFC107"), // Neutral - Yellow
+                Color.parseColor("#2196F3"), // Sad - Blue
+                Color.parseColor("#F44336"), // Angry - Red
+                Color.parseColor("#9C27B0")  // Tired - Purple
         ));
     }
 }
