@@ -53,8 +53,8 @@ public class MoodButton extends MaterialButton {
         // Set corner radius
         setCornerRadius(getResources().getDimensionPixelSize(R.dimen.mood_button_corner));
 
-        // Set text color
-        setTextColor(ContextCompat.getColorStateList(context, R.color.mood_button_text_default));
+        // FIXED: Use selector for text color instead of static color
+        setTextColor(ContextCompat.getColorStateList(context, R.color.mood_button_text));
 
         // Set icon position
         setIconGravity(ICON_GRAVITY_TEXT_START);
@@ -66,41 +66,45 @@ public class MoodButton extends MaterialButton {
                 getResources().getDimensionPixelSize(R.dimen.mood_button_padding_end),
                 getResources().getDimensionPixelSize(R.dimen.mood_button_padding_bottom)
         );
+
+        // Set elevation for better look
+        setElevation(0f);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             animatePress();
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+        } else if (event.getAction() == MotionEvent.ACTION_UP ||
+                event.getAction() == MotionEvent.ACTION_CANCEL) {
             animateRelease();
         }
         return super.onTouchEvent(event);
     }
 
     private void animatePress() {
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", 1f, 0.95f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", 1f, 0.95f);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", 1f, 0.97f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", 1f, 0.97f);
 
         AnimatorSet animSet = new AnimatorSet();
         animSet.playTogether(scaleX, scaleY);
-        animSet.setDuration(100);
+        animSet.setDuration(80);
         animSet.start();
     }
 
     private void animateRelease() {
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", 0.95f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", 0.95f, 1f);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", 0.97f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", 0.97f, 1f);
 
         AnimatorSet animSet = new AnimatorSet();
         animSet.playTogether(scaleX, scaleY);
-        animSet.setDuration(100);
+        animSet.setDuration(80);
         animSet.start();
     }
 
     public void animateSelection() {
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", 1f, 1.1f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", 1f, 1.1f, 1f);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(this, "scaleX", 1f, 1.05f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(this, "scaleY", 1f, 1.05f, 1f);
 
         AnimatorSet animSet = new AnimatorSet();
         animSet.playTogether(scaleX, scaleY);
@@ -127,6 +131,8 @@ public class MoodButton extends MaterialButton {
                     ContextCompat.getColor(getContext(), R.color.mood_button_default)
             ));
         }
+        // Force text color update
+        refreshDrawableState();
     }
 
     public boolean isSelected() {

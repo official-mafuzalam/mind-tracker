@@ -63,9 +63,9 @@ public class InsightsFragment extends Fragment {
         // Find most common mood
         String mostCommon = findMostCommonMood();
 
-        tvTotalEntries.setText("Total Entries: " + totalEntries);
-        tvStreak.setText("Current Streak: " + streak + " days");
-        tvMostCommon.setText("Most Common: " + mostCommon);
+        tvTotalEntries.setText(" " + totalEntries);
+        tvStreak.setText(" " + streak + " days");
+        tvMostCommon.setText(mostCommon);
     }
 
     private int calculateStreak() {

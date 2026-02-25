@@ -1,9 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MindTracker" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- Base application theme with DayNight support -->
+    <style name="Base.Theme.MindTracker" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar">
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryContainer">@color/purple_100</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimaryContainer">@color/purple_900</item>
+
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/green_500</item>
+        <item name="colorSecondaryContainer">@color/green_100</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondaryContainer">@color/green_900</item>
+
+        <!-- Surface colors -->
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_light</item>
+        <item name="colorOnSurfaceVariant">@color/grey_800</item>
+
+        <!-- Background -->
+        <item name="android:background">@color/surface_light</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">@bool/window_light_status_bar</item>
+
+        <!-- Navigation bar -->
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightNavigationBar">@bool/window_light_navigation_bar</item>
+
+        <!-- Handle cutouts properly -->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 
-    <style name="Theme.MindTracker" parent="Base.Theme.MindTracker" />
+    <!-- Light theme specific overrides -->
+    <style name="Theme.MindTracker" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Brand colors -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/green_500</item>
+
+        <!-- Surface -->
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnSurface">@color/black</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Navigation bar -->
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+    </style>
+
 </resources>

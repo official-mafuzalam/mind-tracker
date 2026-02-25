@@ -1,19 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!-- Primary Purple shades -->
     <color name="purple_500">#FF6200EE</color>
-    <color name="green_500">#FF4CAF50</color>
+    <color name="purple_100">#FFE8DEF0</color>
+    <color name="purple_900">#FF22004E</color>
 
-    <!-- Mood button colors -->
+    <!-- Secondary Green shades -->
+    <color name="green_500">#FF4CAF50</color>
+    <color name="green_100">#FFC8E6C9</color>
+    <color name="green_900">#FF1B5E20</color>
+
+    <!-- Grey shades -->
+    <color name="grey_300">#FFE0E0E0</color>
+    <color name="grey_800">#FF424242</color>
+
+    <!-- Surface colors - Light mode -->
+    <color name="surface_light">#FFF9F9F9</color>
+    <color name="surface_variant_light">#FFE1E2E5</color>
+
+    <!-- Surface colors - Dark mode (will be overridden in values-night/colors.xml) -->
+    <color name="surface_dark">#FF1E1E1E</color>
+    <color name="surface_variant_dark">#FF2D2D2D</color>
+
+    <!-- Mood button colors - Light mode -->
     <color name="mood_button_default">#F5F5F5</color>
     <color name="mood_button_selected">#E8F0FE</color>
 
-    <!-- Mood button text colors -->
+    <!-- Mood button text colors - Light mode -->
     <color name="mood_button_text_default">#FF000000</color>
     <color name="mood_button_text_selected">#FF6200EE</color>
 
-    <color name="surface_light">#FFF9F9F9</color>
+    <!-- Primary color reference -->
     <color name="primary">#FF6200EE</color>
+
+    <!-- Tab colors -->
+    <color name="tab_text_normal">#B3FFFFFF</color>  <!-- Semi-transparent white -->
+    <color name="tab_text_selected">#FFFFFFFF</color> <!-- Pure white -->
+    <color name="tab_indicator">#FFFFFFFF</color>     <!-- White indicator -->
+
+    <!-- Boolean values for status/navigation bar -->
+    <bool name="window_light_status_bar">true</bool>
+    <bool name="window_light_navigation_bar">true</bool>
+    <bool name="window_light_status_bar_night">false</bool>
+    <bool name="window_light_navigation_bar_night">false</bool>
 </resources>

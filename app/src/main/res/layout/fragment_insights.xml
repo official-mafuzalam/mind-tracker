@@ -25,7 +25,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="@drawable/insight_card_bg"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -49,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:background="@drawable/insight_card_bg"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -73,7 +71,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/insight_card_bg"
         android:padding="16dp">
 
         <TextView

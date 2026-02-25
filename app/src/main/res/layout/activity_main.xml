@@ -3,33 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurface"
+    android:orientation="vertical">
 
-    <!-- App Bar with Title -->
+    <!-- Top App Bar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
+        style="@style/Widget.Material3.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        app:menu="@menu/main_menu"
+        app:popupTheme="@style/ThemeOverlay.Material3.Light"
         app:title="MindTracker"
-        app:titleTextColor="@android:color/white"
-        app:menu="@menu/main_menu" />
+        app:titleTextColor="?attr/colorOnPrimary" />
 
-    <!-- Tab Layout -->
+    <!-- Tabs -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        app:tabTextColor="@android:color/white"
-        app:tabSelectedTextColor="@android:color/white"
+        app:tabGravity="fill"
         app:tabIconTint="@android:color/white"
         app:tabIndicatorColor="@android:color/white"
         app:tabMode="fixed"
-        app:tabGravity="fill" />
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="@android:color/white" />
 
-    <!-- ViewPager for Fragments -->
+    <!-- ViewPager -->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"

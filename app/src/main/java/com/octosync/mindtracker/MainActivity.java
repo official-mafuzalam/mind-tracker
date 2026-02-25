@@ -2,16 +2,21 @@ package com.octosync.mindtracker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import androidx.core.graphics.Insets;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
@@ -34,7 +39,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Enable edge-to-edge
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         setContentView(R.layout.activity_main);
+
+        // Apply system bar insets to root layout
+        View root = findViewById(android.R.id.content);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    systemBars.bottom
+            );
+            return insets;
+        });
 
         sharedPreferences = getSharedPreferences("MoodPrefs", MODE_PRIVATE);
 

@@ -20,7 +20,7 @@ import java.util.Locale;
 
 public class MoodFragment extends Fragment {
 
-    private TextView tvDate, tvTodayMood;
+    private TextView tvDate, tvTodayMood, tvQuote;
     private MoodButton btnHappy, btnNeutral, btnSad, btnAngry, btnTired;
     private MaterialButton btnUpdateMood, btnStats;
     private MoodButton selectedMoodButton;
@@ -42,6 +42,8 @@ public class MoodFragment extends Fragment {
         initViews(view);
         displayDate();
         checkTodayMood();
+        tvQuote.setText(randomQuote());
+
 
         return view;
     }
@@ -49,6 +51,7 @@ public class MoodFragment extends Fragment {
     private void initViews(View view) {
         tvDate = view.findViewById(R.id.tvDate);
         tvTodayMood = view.findViewById(R.id.tvTodayMood);
+        tvQuote = view.findViewById(R.id.tvQuote);
 
         // Initialize custom mood buttons
         btnHappy = view.findViewById(R.id.btnHappy);
@@ -118,13 +121,32 @@ public class MoodFragment extends Fragment {
 
     private String getMoodMessage(String mood) {
         switch (mood) {
-            case "Happy": return "Keep smiling! 😊";
-            case "Neutral": return "Stay balanced! ⚖️";
-            case "Sad": return "Tomorrow will be better 🌈";
-            case "Angry": return "Take a deep breath 🧘";
-            case "Tired": return "Rest well! 😴";
-            default: return "";
+            case "Happy":
+                return "Keep smiling! 😊";
+            case "Neutral":
+                return "Stay balanced! ⚖️";
+            case "Sad":
+                return "Tomorrow will be better 🌈";
+            case "Angry":
+                return "Take a deep breath 🧘";
+            case "Tired":
+                return "Rest well! 😴";
+            default:
+                return "";
         }
+    }
+
+    private String randomQuote() {
+        String[] quotes = {
+                "“Every day is a fresh start.”",
+                "“Happiness is good for health.”",
+                "“Small steps still move you forward.”",
+                "“Your mood does not define your worth.”",
+                "“Progress, not perfection.”"
+        };
+
+        int randomIndex = new java.util.Random().nextInt(quotes.length);
+        return quotes[randomIndex];
     }
 
     private void showSavedMood(String mood) {

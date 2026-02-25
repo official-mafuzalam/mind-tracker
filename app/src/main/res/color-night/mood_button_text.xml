@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected state - Dark mode -->
+    <item android:state_selected="true" android:color="@color/mood_button_text_selected" />
+    <!-- Default state - Dark mode -->
+    <item android:color="@color/mood_button_text_default" />
+</selector>
