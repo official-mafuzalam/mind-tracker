@@ -1,5 +1,8 @@
 package com.octosync.mindtracker;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -115,7 +118,19 @@ public class MoodFragment extends Fragment {
             String message = getMoodMessage(mood);
             Toast.makeText(getContext(), "Mood saved! " + message, Toast.LENGTH_SHORT).show();
 
+            updateWidget();
             showSavedMood(mood);
+        }
+    }
+
+    private void updateWidget() {
+        if (getContext() != null) {
+            Intent intent = new Intent(getContext(), MoodWidget.class);
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            int[] ids = AppWidgetManager.getInstance(getContext())
+                    .getAppWidgetIds(new ComponentName(getContext(), MoodWidget.class));
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+            getContext().sendBroadcast(intent);
         }
     }
 
@@ -126,7 +141,7 @@ public class MoodFragment extends Fragment {
             case "Neutral":
                 return "Stay balanced! ⚖️";
             case "Sad":
-                return "Tomorrow will be better 🌈";
+                return "Tomorrow will be better 🦾";
             case "Angry":
                 return "Take a deep breath 🧘";
             case "Tired":

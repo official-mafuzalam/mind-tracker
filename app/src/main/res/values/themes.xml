@@ -1,62 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme with DayNight support -->
-    <style name="Base.Theme.MindTracker" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar">
+    <style name="Base.Theme.MindTracker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary colors -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryContainer">@color/purple_100</item>
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorPrimaryContainer">@color/brand_primary_container</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorOnPrimaryContainer">@color/purple_900</item>
+        <item name="colorOnPrimaryContainer">@color/brand_on_primary_container</item>
 
         <!-- Secondary colors -->
-        <item name="colorSecondary">@color/green_500</item>
-        <item name="colorSecondaryContainer">@color/green_100</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <item name="colorOnSecondaryContainer">@color/green_900</item>
+        <item name="colorSecondary">@color/brand_secondary</item>
+        <item name="colorSecondaryContainer">@color/brand_secondary_container</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnSecondaryContainer">@color/brand_on_secondary_container</item>
 
         <!-- Surface colors -->
-        <item name="colorSurface">@color/surface_light</item>
-        <item name="colorOnSurface">@color/black</item>
-        <item name="colorSurfaceVariant">@color/surface_variant_light</item>
-        <item name="colorOnSurfaceVariant">@color/grey_800</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant</item>
 
-        <!-- Background -->
-        <item name="android:background">@color/surface_light</item>
-
-        <!-- Status bar -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
-        <item name="android:windowLightStatusBar">@bool/window_light_status_bar</item>
-
-        <!-- Navigation bar -->
-        <item name="android:navigationBarColor">?attr/colorPrimary</item>
-        <item name="android:windowLightNavigationBar">@bool/window_light_navigation_bar</item>
-
-        <!-- Handle cutouts properly -->
-        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
-    <!-- Light theme specific overrides -->
-    <style name="Theme.MindTracker" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.MindTracker" parent="Base.Theme.MindTracker" />
 
-        <!-- Brand colors -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorOnPrimary">@color/white</item>
-
-        <item name="colorSecondary">@color/green_500</item>
-
-        <!-- Surface -->
-        <item name="colorSurface">@color/surface_light</item>
-        <item name="colorOnSurface">@color/black</item>
-
-        <!-- Status bar -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
-        <item name="android:windowLightStatusBar">true</item>
-
-        <!-- Navigation bar -->
-        <item name="android:navigationBarColor">?attr/colorPrimary</item>
-        <item name="android:windowLightNavigationBar">true</item>
-
+    <style name="Widget.MindTracker.Card" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">24dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardBackgroundColor">?attr/colorSurfaceVariant</item>
     </style>
 
 </resources>

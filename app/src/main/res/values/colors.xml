@@ -1,50 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base colors -->
-    <color name="black">#FF000000</color>
+    <color name="black">#FF1A1C1E</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Primary Purple shades -->
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_100">#FFE8DEF0</color>
-    <color name="purple_900">#FF22004E</color>
+    <!-- Modern Soft Palette -->
+    <color name="brand_primary">#6750A4</color>
+    <color name="brand_primary_container">#EADDFF</color>
+    <color name="brand_on_primary_container">#21005D</color>
 
-    <!-- Secondary Green shades -->
-    <color name="green_500">#FF4CAF50</color>
-    <color name="green_100">#FFC8E6C9</color>
-    <color name="green_900">#FF1B5E20</color>
+    <color name="brand_secondary">#625B71</color>
+    <color name="brand_secondary_container">#E8DEF8</color>
+    <color name="brand_on_secondary_container">#1D192B</color>
 
-    <!-- Grey shades -->
-    <color name="grey_300">#FFE0E0E0</color>
-    <color name="grey_800">#FF424242</color>
+    <color name="brand_tertiary">#7D5260</color>
+    <color name="brand_tertiary_container">#FFD8E4</color>
+    <color name="brand_on_tertiary_container">#31111D</color>
 
-    <!-- Surface colors - Light mode -->
-    <color name="surface_light">#FFF9F9F9</color>
-    <color name="surface_variant_light">#FFE1E2E5</color>
+    <!-- Surface & Background -->
+    <color name="background">#FFFBFE</color>
+    <color name="surface">#FFFBFE</color>
+    <color name="surface_variant">#E7E0EB</color>
+    <color name="on_surface">#1C1B1F</color>
+    <color name="on_surface_variant">#49454F</color>
 
-    <!-- Surface colors - Dark mode (will be overridden in values-night/colors.xml) -->
-    <color name="surface_dark">#FF1E1E1E</color>
-    <color name="surface_variant_dark">#FF2D2D2D</color>
+    <!-- Mood Specific Colors -->
+    <color name="mood_happy">#FFF9C4</color>
+    <color name="mood_neutral">#E1F5FE</color>
+    <color name="mood_sad">#E8EAF6</color>
+    <color name="mood_angry">#FFEBEE</color>
+    <color name="mood_tired">#F3E5F5</color>
 
-    <!-- Mood button colors - Light mode -->
-    <color name="mood_button_default">#F5F5F5</color>
-    <color name="mood_button_selected">#E8F0FE</color>
-
-    <!-- Mood button text colors - Light mode -->
-    <color name="mood_button_text_default">#FF000000</color>
-    <color name="mood_button_text_selected">#FF6200EE</color>
-
-    <!-- Primary color reference -->
-    <color name="primary">#FF6200EE</color>
-
-    <!-- Tab colors -->
-    <color name="tab_text_normal">#B3FFFFFF</color>  <!-- Semi-transparent white -->
-    <color name="tab_text_selected">#FFFFFFFF</color> <!-- Pure white -->
-    <color name="tab_indicator">#FFFFFFFF</color>     <!-- White indicator -->
-
-    <!-- Boolean values for status/navigation bar -->
-    <bool name="window_light_status_bar">true</bool>
-    <bool name="window_light_navigation_bar">true</bool>
-    <bool name="window_light_status_bar_night">false</bool>
-    <bool name="window_light_navigation_bar_night">false</bool>
+    <!-- Legacy / Compatibility -->
+    <color name="purple_500">#6750A4</color>
+    <color name="purple_100">#EADDFF</color>
+    <color name="purple_900">#21005D</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="green_100">#C8E6C9</color>
+    <color name="green_900">#1B5E20</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_800">#424242</color>
+    <color name="surface_light">#FFFBFE</color>
+    <color name="surface_variant_light">#E7E0EB</color>
+    <color name="tab_text_normal">#99FFFFFF</color>
+    <color name="tab_text_selected">#FFFFFFFF</color>
+    <color name="tab_indicator">#FFFFFFFF</color>
 </resources>

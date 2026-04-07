@@ -1,9 +1,10 @@
 package com.octosync.mindtracker;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import androidx.core.graphics.Insets;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,17 +15,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +48,13 @@ public class MainActivity extends AppCompatActivity {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         setContentView(R.layout.activity_main);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                    != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
 
         // Apply system bar insets to root layout
         View root = findViewById(android.R.id.content);
@@ -115,11 +126,14 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "Settings coming soon", Toast.LENGTH_SHORT).show();
+            showTimePickerDialog();
             return true;
-        } else if (id == R.id.action_export) {
-            Toast.makeText(this, "Export feature coming soon", Toast.LENGTH_SHORT).show();
-            return true;
+//        } else if (id == R.id.action_export) {
+//            // Test notification
+//            OneTimeWorkRequest testRequest = new OneTimeWorkRequest.Builder(MoodReminderWorker.class).build();
+//            WorkManager.getInstance(this).enqueue(testRequest);
+//            Toast.makeText(this, "Test notification sent!", Toast.LENGTH_SHORT).show();
+//            return true;
         } else if (id == R.id.action_about) {
             Toast.makeText(this, "MindTracker v1.0", Toast.LENGTH_SHORT).show();
             openWebsite("https://octosyncsoftware.com/");
@@ -131,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Open a website in the browser
+     *
      * @param url The URL to open
      */
     private void openWebsite(String url) {
@@ -156,37 +171,58 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void showTimePickerDialog() {
+        int hour = sharedPreferences.getInt("notification_hour", 20);
+        int minute = sharedPreferences.getInt("notification_minute", 0);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                (view, hourOfDay, minuteOfHour) -> {
+                    sharedPreferences.edit()
+                            .putInt("notification_hour", hourOfDay)
+                            .putInt("notification_minute", minuteOfHour)
+                            .apply();
+                    
+                    scheduleDailyNotification();
+                    Toast.makeText(this, "Reminder set for " + 
+                            String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minuteOfHour),
+                            Toast.LENGTH_SHORT).show();
+                }, hour, minute, false);
+        timePickerDialog.show();
+    }
+
     private void scheduleDailyNotification() {
-        // Calendar instance for 5:30 PM
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 17);
-        calendar.set(Calendar.MINUTE, 30);
+        long nowMillis = calendar.getTimeInMillis();
+
+        // Get saved time or default to 8:00 PM
+        int hour = sharedPreferences.getInt("notification_hour", 20);
+        int minute = sharedPreferences.getInt("notification_minute", 0);
+
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        long currentTime = System.currentTimeMillis();
-        long scheduledTime = calendar.getTimeInMillis();
-        long initialDelay = scheduledTime - currentTime;
-
-        // If 5:30 PM already passed today, schedule for tomorrow
-        if (initialDelay < 0) {
-            initialDelay += TimeUnit.DAYS.toMillis(1);
+        // If it's already past the target time today, schedule for tomorrow
+        if (calendar.getTimeInMillis() <= nowMillis) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
 
-        // Create a periodic work request repeating every 24 hours
-        PeriodicWorkRequest dailyWorkRequest = new PeriodicWorkRequest.Builder(
+        long initialDelay = calendar.getTimeInMillis() - nowMillis;
+
+        // Create a periodic work request for every 24 hours
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(
                 MoodReminderWorker.class,
-                24,
-                TimeUnit.HOURS
-        )
+                24, TimeUnit.HOURS)
                 .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .addTag("daily_mood_tag")
                 .build();
 
-        // Enqueue unique work to prevent duplicates
+        // Use REPLACE to ensure that if the user changes the time, the schedule is updated
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                "daily_mood_reminder",
+                "DailyMoodReminder",
                 ExistingPeriodicWorkPolicy.REPLACE,
-                dailyWorkRequest
+                periodicWorkRequest
         );
     }
 

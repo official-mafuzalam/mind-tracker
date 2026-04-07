@@ -55,7 +55,12 @@ public class InsightsFragment extends Fragment {
 
     private void loadInsights() {
         Map<String, ?> allEntries = sharedPreferences.getAll();
-        int totalEntries = allEntries.size();
+        int moodEntryCount = 0;
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            if (entry.getValue() instanceof String && entry.getKey().matches("\\d{4}_\\d{2}_\\d{2}")) {
+                moodEntryCount++;
+            }
+        }
 
         // Calculate streak
         int streak = calculateStreak();
@@ -63,7 +68,7 @@ public class InsightsFragment extends Fragment {
         // Find most common mood
         String mostCommon = findMostCommonMood();
 
-        tvTotalEntries.setText(" " + totalEntries);
+        tvTotalEntries.setText(" " + moodEntryCount);
         tvStreak.setText(" " + streak + " days");
         tvMostCommon.setText(mostCommon);
     }
@@ -71,12 +76,12 @@ public class InsightsFragment extends Fragment {
     private int calculateStreak() {
         int streak = 0;
         Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd", Locale.getDefault());
 
         while (true) {
-            String dateKey = new SimpleDateFormat("yyyy_MM_dd", Locale.getDefault())
-                    .format(calendar.getTime());
+            String dateKey = dateFormat.format(calendar.getTime());
 
-            if (sharedPreferences.contains(dateKey)) {
+            if (sharedPreferences.contains(dateKey) && sharedPreferences.getAll().get(dateKey) instanceof String) {
                 streak++;
                 calendar.add(Calendar.DAY_OF_YEAR, -1);
             } else {
@@ -90,9 +95,11 @@ public class InsightsFragment extends Fragment {
         Map<String, ?> allEntries = sharedPreferences.getAll();
         Map<String, Integer> moodCounts = new java.util.HashMap<>();
 
-        for (Object mood : allEntries.values()) {
-            String moodStr = (String) mood;
-            moodCounts.put(moodStr, moodCounts.getOrDefault(moodStr, 0) + 1);
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            if (entry.getValue() instanceof String && entry.getKey().matches("\\d{4}_\\d{2}_\\d{2}")) {
+                String moodStr = (String) entry.getValue();
+                moodCounts.put(moodStr, moodCounts.getOrDefault(moodStr, 0) + 1);
+            }
         }
 
         String mostCommon = "No data";
@@ -116,6 +123,9 @@ public class InsightsFragment extends Fragment {
         SimpleDateFormat storageFormat = new SimpleDateFormat("yyyy_MM_dd", Locale.getDefault());
 
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            if (!(entry.getValue() instanceof String) || !entry.getKey().matches("\\d{4}_\\d{2}_\\d{2}")) {
+                continue;
+            }
             try {
                 String dateStr = entry.getKey();
                 String mood = (String) entry.getValue();

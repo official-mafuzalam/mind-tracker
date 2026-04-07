@@ -36,10 +36,11 @@ public class MoodReminderWorker extends Worker {
         // Create Notification
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_dialog_info) // System icon
+                .setSmallIcon(R.drawable.ic_mood) // Use app icon instead of system icon
                 .setContentTitle("Record Your Mood")
                 .setContentText("Don't forget to record your mood today!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
@@ -54,7 +55,7 @@ public class MoodReminderWorker extends Worker {
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Mood Reminder";
-            String description = "Daily reminder to record mood";
+            String description = "Record your today's mood";
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);

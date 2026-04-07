@@ -45,27 +45,26 @@ public class MoodButton extends MaterialButton {
     }
 
     private void init(Context context) {
-        // Set default background
+        // Set default background to surface variant for modern look
         setBackgroundTintList(ColorStateList.valueOf(
-                ContextCompat.getColor(context, R.color.mood_button_default)
+                ContextCompat.getColor(context, R.color.surface_variant)
         ));
 
-        // Set corner radius
+        // Set corner radius to be more rounded
         setCornerRadius(getResources().getDimensionPixelSize(R.dimen.mood_button_corner));
 
-        // FIXED: Use selector for text color instead of static color
-        setTextColor(ContextCompat.getColorStateList(context, R.color.mood_button_text));
+        // Use modern text color
+        setTextColor(ContextCompat.getColor(context, R.color.on_surface));
 
-        // Set icon position
+        // Set icon position and size
         setIconGravity(ICON_GRAVITY_TEXT_START);
+        setIconPadding(16);
+        setIconTintResource(R.color.on_surface);
 
-        // Add padding
-        setPadding(
-                getResources().getDimensionPixelSize(R.dimen.mood_button_padding_start),
-                getResources().getDimensionPixelSize(R.dimen.mood_button_padding_top),
-                getResources().getDimensionPixelSize(R.dimen.mood_button_padding_end),
-                getResources().getDimensionPixelSize(R.dimen.mood_button_padding_bottom)
-        );
+        // Remove uppercase
+        setAllCaps(false);
+        setLetterSpacing(0.02f);
+        setTextSize(16f);
 
         // Set elevation for better look
         setElevation(0f);
@@ -115,20 +114,29 @@ public class MoodButton extends MaterialButton {
     public void setSelected(boolean selected) {
         this.isSelected = selected;
         if (selected) {
-            // Highlight selected button
+            // Highlight selected button with modern Material 3 style
             setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.mood_button_stroke_selected));
             setStrokeColor(ColorStateList.valueOf(
-                    ContextCompat.getColor(getContext(), R.color.primary)
+                    ContextCompat.getColor(getContext(), R.id.btnHappy == getId() ? R.color.brand_primary : R.color.brand_primary)
             ));
+            
+            // Apply mood-specific background colors if selected
+            int bgColor = R.color.brand_primary_container;
+            if (getId() == R.id.btnHappy) bgColor = R.color.mood_happy;
+            else if (getId() == R.id.btnNeutral) bgColor = R.color.mood_neutral;
+            else if (getId() == R.id.btnSad) bgColor = R.color.mood_sad;
+            else if (getId() == R.id.btnAngry) bgColor = R.color.mood_angry;
+            else if (getId() == R.id.btnTired) bgColor = R.color.mood_tired;
+            
             setBackgroundTintList(ColorStateList.valueOf(
-                    ContextCompat.getColor(getContext(), R.color.mood_button_selected)
+                    ContextCompat.getColor(getContext(), bgColor)
             ));
             animateSelection();
         } else {
-            // Reset to normal
+            // Reset to normal surface variant
             setStrokeWidth(0);
             setBackgroundTintList(ColorStateList.valueOf(
-                    ContextCompat.getColor(getContext(), R.color.mood_button_default)
+                    ContextCompat.getColor(getContext(), R.color.surface_variant)
             ));
         }
         // Force text color update

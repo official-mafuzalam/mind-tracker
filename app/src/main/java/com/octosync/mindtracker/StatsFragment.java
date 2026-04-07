@@ -46,7 +46,8 @@ public class StatsFragment extends Fragment {
     private BarChart barChart;
     private TextView tvDebug;
 
-    private final String[] moods = {"😊 Happy", "😐 Neutral", "😔 Sad", "😡 Angry", "😴 Tired"};
+    private final String[] moods = {"Happy", "Neutral", "Sad", "Angry", "Tired"};
+    private final String[] moodLabels = {"😊 Happy", "😐 Neutral", "😔 Sad", "😡 Angry", "😴 Tired"};
     private final int[] moodColors = {
             Color.parseColor("#4CAF50"), // Happy - Green
             Color.parseColor("#FFC107"), // Neutral - Yellow
@@ -63,10 +64,6 @@ public class StatsFragment extends Fragment {
         // Get SharedPreferences - use the same name as MainActivity
         sharedPreferences = requireActivity().getSharedPreferences("MoodPrefs", Context.MODE_PRIVATE);
 
-        // Optional: Add debug TextView temporarily
-        tvDebug = new TextView(getContext());
-        tvDebug.setVisibility(View.GONE); // Hide by default
-
         pieChart = view.findViewById(R.id.pieChart);
         barChart = view.findViewById(R.id.barChart);
 
@@ -74,10 +71,15 @@ public class StatsFragment extends Fragment {
         configurePieChart();
         configureBarChart();
 
-        // Load data
-        loadChartData();
-
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isResumed()) {
+            loadChartData();
+        }
     }
 
     @Override
@@ -92,21 +94,18 @@ public class StatsFragment extends Fragment {
         pieChart.setExtraOffsets(5, 10, 5, 5);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.TRANSPARENT);
-        pieChart.setHoleRadius(7f);
-        pieChart.setTransparentCircleRadius(10f);
+        pieChart.setHoleRadius(40f);
+        pieChart.setTransparentCircleRadius(45f);
 
         Legend pieLegend = pieChart.getLegend();
         pieLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         pieLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
         pieLegend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        pieLegend.setTextColor(Color.WHITE);
+        pieLegend.setTextColor(Color.GRAY);
         pieLegend.setDrawInside(false);
         pieLegend.setEnabled(true);
 
-        pieChart.setDrawEntryLabels(true);
-        pieChart.setEntryLabelColor(Color.BLACK);
-        pieChart.setEntryLabelTextSize(12f);
-
+        pieChart.setDrawEntryLabels(false);
         pieChart.animateY(1000);
     }
 
@@ -120,13 +119,12 @@ public class StatsFragment extends Fragment {
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
-        xAxis.setTextSize(12f);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(moods));
+        xAxis.setTextSize(10f);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(moodLabels));
 
         YAxis leftAxis = barChart.getAxisLeft();
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularity(1f);
-        leftAxis.setTextSize(12f);
         leftAxis.setAxisMinimum(0f);
 
         YAxis rightAxis = barChart.getAxisRight();
@@ -149,53 +147,36 @@ public class StatsFragment extends Fragment {
         ArrayList<PieEntry> entries = new ArrayList<>();
         ArrayList<Integer> colors = new ArrayList<>();
 
-        // Debug: Print weekly counts
-        Log.d(TAG, "Weekly counts (last 7 days):");
-        for (String mood : moods) {
-            int count = weeklyCounts.getOrDefault(mood, 0);
-            Log.d(TAG, "  " + mood + ": " + count);
-        }
-
         // Add entries for moods that have data
         for (int i = 0; i < moods.length; i++) {
             String mood = moods[i];
             int count = weeklyCounts.getOrDefault(mood, 0);
             if (count > 0) {
-                entries.add(new PieEntry(count, mood));
+                entries.add(new PieEntry(count, moodLabels[i]));
                 colors.add(moodColors[i]);
             }
         }
 
         // If no data, show placeholder
         if (entries.isEmpty()) {
-            Log.d(TAG, "No data for pie chart, showing placeholder");
             entries.add(new PieEntry(1, "No Data"));
             colors.add(Color.LTGRAY);
-
-            // Show a message to user
-            if (getContext() != null) {
-                android.widget.Toast.makeText(getContext(),
-                        "No mood data for last 7 days", android.widget.Toast.LENGTH_SHORT).show();
-            }
+            pieChart.setCenterText("No Data Yet");
+        } else {
+            pieChart.setCenterText("Weekly\nMood");
         }
 
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(colors);
-        dataSet.setValueTextSize(14f);
-        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setValueTextSize(12f);
+        dataSet.setValueTextColor(Color.WHITE);
         dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(5f);
 
         PieData data = new PieData(dataSet);
         data.setValueFormatter(new PercentFormatter(pieChart));
-        data.setValueTextSize(12f);
-        data.setValueTextColor(Color.BLACK);
 
         pieChart.setData(data);
-        pieChart.setCenterText("Weekly\nMood");
         pieChart.setCenterTextSize(16f);
-        pieChart.setCenterTextTypeface(Typeface.DEFAULT_BOLD);
-
         pieChart.invalidate();
     }
 
@@ -204,32 +185,19 @@ public class StatsFragment extends Fragment {
         ArrayList<BarEntry> entries = new ArrayList<>();
         ArrayList<Integer> colors = new ArrayList<>();
 
-        // Debug: Print monthly counts
-        Log.d(TAG, "Monthly counts (last 30 days):");
-        for (String mood : moods) {
-            int count = monthlyCounts.getOrDefault(mood, 0);
-            Log.d(TAG, "  " + mood + ": " + count);
-        }
-
         int maxValue = 0;
         for (int i = 0; i < moods.length; i++) {
             int count = monthlyCounts.getOrDefault(moods[i], 0);
             entries.add(new BarEntry(i, count));
             colors.add(moodColors[i]);
-            if (count > maxValue) {
-                maxValue = count;
-            }
+            if (count > maxValue) maxValue = count;
         }
 
-        // Set Y axis max value with some padding
-        barChart.getAxisLeft().setAxisMaximum(maxValue + 1);
+        barChart.getAxisLeft().setAxisMaximum(Math.max(5, maxValue + 1));
 
         BarDataSet dataSet = new BarDataSet(entries, "Last 30 Days");
         dataSet.setColors(colors);
-        dataSet.setValueTextSize(12f);
-        dataSet.setValueTextColor(Color.BLACK);
         dataSet.setDrawValues(true);
-
         dataSet.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -241,7 +209,6 @@ public class StatsFragment extends Fragment {
         data.setBarWidth(0.7f);
 
         barChart.setData(data);
-        barChart.setFitBars(true);
         barChart.invalidate();
     }
 
