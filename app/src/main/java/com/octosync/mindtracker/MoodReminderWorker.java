@@ -5,12 +5,17 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class MoodReminderWorker extends Worker {
 
@@ -23,6 +28,14 @@ public class MoodReminderWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        // Check if mood is already stored for today
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("MoodPrefs", Context.MODE_PRIVATE);
+        String todayDate = new SimpleDateFormat("yyyy_MM_dd", Locale.getDefault()).format(new Date());
+
+        if (sharedPreferences.contains(todayDate)) {
+            // Mood already stored, skip notification
+            return Result.success();
+        }
 
         // Open MainActivity when notification is tapped
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -37,8 +50,8 @@ public class MoodReminderWorker extends Worker {
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_mood) // Use app icon instead of system icon
-                .setContentTitle("Record Your Mood")
-                .setContentText("Don't forget to record your mood today!")
+                .setContentTitle("How are you today?")
+                .setContentText("Don't forget to record your mood!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .setContentIntent(pendingIntent)
