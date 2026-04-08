@@ -25,6 +25,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.github.mikephil.charting.BuildConfig;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Calendar;
@@ -135,7 +136,9 @@ public class MainActivity extends AppCompatActivity {
 //            Toast.makeText(this, "Test notification sent!", Toast.LENGTH_SHORT).show();
 //            return true;
         } else if (id == R.id.action_about) {
-            Toast.makeText(this, "MindTracker v1.0", Toast.LENGTH_SHORT).show();
+            String appName = getString(R.string.app_name);
+            String version = BuildConfig.VERSION_NAME;
+            Toast.makeText(this, appName + " v" + version, Toast.LENGTH_SHORT).show();
             openWebsite("https://octosyncsoftware.com/");
             return true;
         }
