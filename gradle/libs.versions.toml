@@ -1,8 +1,8 @@
 [versions]
 agp = "8.10.1"
-compileSdk = "36"        # Changed from 35 to 36
+compileSdk = "36"        # Target Android 16 (API level 36)
 minSdk = "24"
-targetSdk = "35"         # Keep at 35 for Google Play requirement
+targetSdk = "36"         # Update to 36 to target Android 16 (API level 36) for Google Play requirement
 
 # Testing
 junit = "4.13.2"

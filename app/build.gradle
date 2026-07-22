@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.octosync.mindtracker"
         minSdk libs.versions.minSdk.get().toInteger()
-        targetSdk libs.versions.targetSdk.get().toInteger()  // This stays at 35
+        targetSdk libs.versions.targetSdk.get().toInteger()  // This will be 36
         versionCode 3
         versionName "1.0.2"
 
