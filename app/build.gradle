@@ -10,10 +10,11 @@ android {
         applicationId "com.octosync.mindtracker"
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdk libs.versions.targetSdk.get().toInteger()  // This will be 36
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resourceConfigurations += ["en"]
     }
 
     buildTypes {
@@ -33,7 +34,9 @@ android {
         resources {
             excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt',
                          'META-INF/license.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt',
-                         'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/*.kotlin_module']
+                         'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/*.kotlin_module',
+                         'META-INF/*.version', 'META-INF/com.android.tools/**',
+                         '**/kotlin-tooling-metadata.json']
         }
     }
 }
@@ -48,6 +51,7 @@ dependencies {
     implementation libs.androidx.viewpager
     implementation libs.androidx.browser
     implementation libs.androidx.work
+    implementation libs.androidx.biometric
 
     // Charts
     implementation libs.mpandroidchart

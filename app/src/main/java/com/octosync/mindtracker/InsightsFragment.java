@@ -129,19 +129,21 @@ public class InsightsFragment extends Fragment {
             try {
                 String dateStr = entry.getKey();
                 String mood = (String) entry.getValue();
+                String note = sharedPreferences.getString(dateStr + "_note", "");
+                String tags = sharedPreferences.getString(dateStr + "_tags", "");
 
                 // Convert storage date to display date
                 java.util.Date date = storageFormat.parse(dateStr);
                 String displayDate = displayFormat.format(date);
 
-                entries.add(new MoodEntry(displayDate, mood));
+                entries.add(new MoodEntry(displayDate, mood, note, tags, dateStr));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         // Sort by date (newest first)
-        Collections.sort(entries, (e1, e2) -> e2.date.compareTo(e1.date));
+        Collections.sort(entries, (e1, e2) -> e2.rawDate.compareTo(e1.rawDate));
 
         adapter.setEntries(entries);
     }
@@ -150,10 +152,16 @@ public class InsightsFragment extends Fragment {
     private static class MoodEntry {
         String date;
         String mood;
+        String note;
+        String tags;
+        String rawDate;
 
-        MoodEntry(String date, String mood) {
+        MoodEntry(String date, String mood, String note, String tags, String rawDate) {
             this.date = date;
             this.mood = mood;
+            this.note = note;
+            this.tags = tags;
+            this.rawDate = rawDate;
         }
     }
 
@@ -176,6 +184,20 @@ public class InsightsFragment extends Fragment {
             holder.tvDate.setText(entry.date);
             holder.tvMood.setText(entry.mood);
 
+            if (entry.tags != null && !entry.tags.isEmpty()) {
+                holder.tvTags.setText(entry.tags);
+                holder.tvTags.setVisibility(View.VISIBLE);
+            } else {
+                holder.tvTags.setVisibility(View.GONE);
+            }
+
+            if (entry.note != null && !entry.note.isEmpty()) {
+                holder.tvNote.setText("“" + entry.note + "”");
+                holder.tvNote.setVisibility(View.VISIBLE);
+            } else {
+                holder.tvNote.setVisibility(View.GONE);
+            }
+
             // Set mood icon/color based on mood type
             int color = getMoodColor(entry.mood);
             holder.viewColor.setBackgroundColor(color);
@@ -192,13 +214,15 @@ public class InsightsFragment extends Fragment {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            TextView tvDate, tvMood;
+            TextView tvDate, tvMood, tvTags, tvNote;
             View viewColor;
 
             ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 tvDate = itemView.findViewById(R.id.tvDate);
                 tvMood = itemView.findViewById(R.id.tvMood);
+                tvTags = itemView.findViewById(R.id.tvTags);
+                tvNote = itemView.findViewById(R.id.tvNote);
                 viewColor = itemView.findViewById(R.id.viewColor);
             }
         }

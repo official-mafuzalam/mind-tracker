@@ -16,6 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +30,8 @@ public class MoodFragment extends Fragment {
     private MoodButton btnHappy, btnNeutral, btnSad, btnAngry, btnTired;
     private MaterialButton btnUpdateMood, btnStats;
     private MoodButton selectedMoodButton;
+    private ChipGroup chipGroupActivities;
+    private TextInputEditText etMoodNote;
     private SharedPreferences sharedPreferences;
     private String todayDate;
 
@@ -62,6 +67,9 @@ public class MoodFragment extends Fragment {
         btnSad = view.findViewById(R.id.btnSad);
         btnAngry = view.findViewById(R.id.btnAngry);
         btnTired = view.findViewById(R.id.btnTired);
+
+        chipGroupActivities = view.findViewById(R.id.chipGroupActivities);
+        etMoodNote = view.findViewById(R.id.etMoodNote);
 
         btnUpdateMood = view.findViewById(R.id.btnUpdateMood);
         btnStats = view.findViewById(R.id.btnStats);
@@ -112,7 +120,25 @@ public class MoodFragment extends Fragment {
 
     private void saveMood(String mood) {
         if (sharedPreferences != null) {
-            sharedPreferences.edit().putString(todayDate, mood).apply();
+            String note = etMoodNote != null && etMoodNote.getText() != null ? etMoodNote.getText().toString().trim() : "";
+            
+            StringBuilder tagsBuilder = new StringBuilder();
+            if (chipGroupActivities != null && getView() != null) {
+                for (int id : chipGroupActivities.getCheckedChipIds()) {
+                    Chip chip = getView().findViewById(id);
+                    if (chip != null) {
+                        if (tagsBuilder.length() > 0) tagsBuilder.append(", ");
+                        tagsBuilder.append(chip.getText());
+                    }
+                }
+            }
+            String tags = tagsBuilder.toString();
+
+            sharedPreferences.edit()
+                    .putString(todayDate, mood)
+                    .putString(todayDate + "_note", note)
+                    .putString(todayDate + "_tags", tags)
+                    .apply();
 
             // Show message
             String message = getMoodMessage(mood);
@@ -168,12 +194,22 @@ public class MoodFragment extends Fragment {
         tvTodayMood.setText("Today's Mood: " + mood);
         tvTodayMood.setVisibility(View.VISIBLE);
 
-        // Disable mood buttons
+        // Populate note and tags if available
+        if (sharedPreferences != null) {
+            String savedNote = sharedPreferences.getString(todayDate + "_note", "");
+            if (etMoodNote != null && !savedNote.isEmpty()) {
+                etMoodNote.setText(savedNote);
+            }
+        }
+
+        // Disable mood buttons & inputs
         btnHappy.setEnabled(false);
         btnNeutral.setEnabled(false);
         btnSad.setEnabled(false);
         btnAngry.setEnabled(false);
         btnTired.setEnabled(false);
+        if (etMoodNote != null) etMoodNote.setEnabled(false);
+        if (chipGroupActivities != null) chipGroupActivities.setEnabled(false);
 
         btnUpdateMood.setVisibility(View.VISIBLE);
     }
@@ -186,6 +222,8 @@ public class MoodFragment extends Fragment {
         btnSad.setEnabled(true);
         btnAngry.setEnabled(true);
         btnTired.setEnabled(true);
+        if (etMoodNote != null) etMoodNote.setEnabled(true);
+        if (chipGroupActivities != null) chipGroupActivities.setEnabled(true);
 
         if (selectedMoodButton != null) {
             selectedMoodButton.setSelected(false);

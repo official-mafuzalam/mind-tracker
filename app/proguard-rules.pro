@@ -16,6 +16,9 @@
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Preserve MPAndroidChart components used in charts
+-keep class com.github.mikephil.charting.charts.** { *; }
+-keep class com.github.mikephil.charting.data.** { *; }
+-keep class com.github.mikephil.charting.components.** { *; }
+-keep class com.github.mikephil.charting.formatter.** { *; }
+-dontwarn com.github.mikephil.charting.**
